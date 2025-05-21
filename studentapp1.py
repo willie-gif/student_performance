@@ -6,6 +6,7 @@ import numpy as np
 import seaborn as sns
 import firebase_admin
 import requests
+from dotenv import load_dotenv
 import os
 import time
 import io
@@ -40,9 +41,14 @@ Learning_Disabilities_le = stu_data["Learning_Disabilities_le"]
 Peer_Influence_le = stu_data["Peer_Influence_le"]
 
 # Firebase project details
-FIREBASE_API_KEY = "AIzaSyAO0fUxRx-nsWwQ_-wUlNaEw1TZvnEs0LA"
-FIREBASE_AUTH_URL = f"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={FIREBASE_API_KEY}"
+load_dotenv()  # Loads from .env in current directory
 
+FIREBASE_API_KEY = os.getenv("FIREBASE_API_KEY")
+
+if not FIREBASE_API_KEY:
+    raise ValueError("FIREBASE_API_KEY is not loaded. Check your .env file.")
+
+FIREBASE_AUTH_URL = f"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={FIREBASE_API_KEY}"
 # Initialize Firebase
 if "firebase_initialized" not in st.session_state:
     if not firebase_admin._apps:  # Prevent multiple initializations
